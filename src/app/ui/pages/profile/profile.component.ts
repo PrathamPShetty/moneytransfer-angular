@@ -4,6 +4,7 @@ import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {Router} from '@angular/router';
 import {CurrencyPipe} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
+import {ProfileService} from '../../../services/profile/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,28 +22,33 @@ import {MatButton, MatIconButton} from '@angular/material/button';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  user = {
-    name: 'John Doe',
-    phone: '+91 9876543210',
-    walletId: '12345678',
-    balance: 100000,
+
+  user: any = {
+    name: '',
+    phone: '',
+    walletId: '',
+    balance: 0,
     profilePic: ''
   };
+
   showBalance = false;
-  constructor(private router: Router) {}
+  constructor(private router: Router,private profileService: ProfileService) {}
+  ngOnInit(): void {
+    this.fetchProfile();
+  }
   toggleBalance() {
     this.showBalance = !this.showBalance;
   }
 
-  uploadProfilePicture(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.user.profilePic = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
+  fetchProfile(): void {
+    this.profileService.getProfile().subscribe(
+      (data) => {
+        this.user = data.data;
+      },
+      (error) => {
+        console.error('Error fetching profile:', error);
+      }
+    );
   }
 
   navigateTo(page: string): void {

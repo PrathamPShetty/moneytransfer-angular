@@ -1,67 +1,36 @@
-import { Component } from '@angular/core';
-import {MatCard} from '@angular/material/card';
-import {MatIcon} from '@angular/material/icon';
-import {DatePipe, DecimalPipe, NgClass, TitleCasePipe} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+
+import {DatePipe, NgClass, TitleCasePipe} from '@angular/common';
+import {TransactionsService} from '../../../services/transaction/transaction.service';
 
 @Component({
   selector: 'app-transactions',
-  imports: [
-
-    NgClass,
-
-    DatePipe,
-    TitleCasePipe
-  ],
   templateUrl: './transactions.component.html',
+  imports: [
+    TitleCasePipe,
+    NgClass,
+    DatePipe
+  ],
   styleUrl: './transactions.component.css'
 })
-export class TransactionsComponent {
+export class TransactionsComponent implements OnInit {
   transactions: any[] = [];
-  userWallet: string = '12345678'; // Dummy logged-in user wallet ID
+  userWallet: string = '12345678'; // Replace with actual user wallet ID from authentication
 
-  constructor() {}
+  constructor(private transactionService:TransactionsService) {}
 
   ngOnInit(): void {
-    this.loadDummyTransactions();
+    this.fetchTransactions();
   }
 
-  loadDummyTransactions(): void {
-    this.transactions = [
-      {
-        sender_wallet: '12345678',
-        receiver_wallet: '87654321',
-        amount: 2500,
-        timestamp: '2025-03-16T14:30:00',
-        status: 'success'
+  fetchTransactions(): void {
+    this.transactionService.getTransactions().subscribe(
+      (data: { data: any[]; }) => {
+        this.transactions = data.data; // Assuming formatted_response() wraps data in a "data" key
       },
-      {
-        sender_wallet: '87654321',
-        receiver_wallet: '12345678',
-        amount: 5000,
-        timestamp: '2025-03-15T10:15:00',
-        status: 'success'
-      },
-      {
-        sender_wallet: '12345678',
-        receiver_wallet: '56781234',
-        amount: 1200,
-        timestamp: '2025-03-14T08:45:00',
-        status: 'failed'
-      },
-      {
-        sender_wallet: '99998888',
-        receiver_wallet: '12345678',
-        amount: 3000,
-        timestamp: '2025-03-13T19:10:00',
-        status: 'success'
-      },
-      {
-        sender_wallet: '12345678',
-        receiver_wallet: '44445555',
-        amount: 800,
-        timestamp: '2025-03-12T12:00:00',
-        status: 'success'
+      (error: any) => {
+        console.error('Error fetching transactions', error);
       }
-    ];
+    );
   }
 }
