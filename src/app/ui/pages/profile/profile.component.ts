@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {CurrencyPipe} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {ProfileService} from '../../../services/profile/profile.service';
+import {AuthService} from '../../../services/network/api-helper/api-helper.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,7 +33,7 @@ export class ProfileComponent {
   };
 
   showBalance = false;
-  constructor(private router: Router,private profileService: ProfileService) {}
+  constructor(private router: Router,private authService: AuthService) {}
   ngOnInit(): void {
     this.fetchProfile();
   }
@@ -41,7 +42,7 @@ export class ProfileComponent {
   }
 
   fetchProfile(): void {
-    this.profileService.getProfile().subscribe(
+    this.authService.getProfile().subscribe(
       (data) => {
         this.user = data.data;
       },

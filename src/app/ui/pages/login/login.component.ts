@@ -36,7 +36,7 @@ export class LoginComponent {
     this.loading = true;
     this.errorMessage = '';
 
-    this.http.post('http://bank.mcceducare.com/api/token/', {
+    this.http.post('http://127.0.0.1:8000/api/token/', {
       email: this.email,
       password: this.password
     }).subscribe(

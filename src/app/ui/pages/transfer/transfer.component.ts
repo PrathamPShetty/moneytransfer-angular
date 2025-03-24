@@ -9,6 +9,7 @@ import {RouterLink} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DatePipe} from '@angular/common';
 import html2canvas from 'html2canvas';
+import {AuthService} from '../../../services/network/api-helper/api-helper.service';
 @Component({
   selector: 'app-transfer',
   imports: [
@@ -27,7 +28,7 @@ import html2canvas from 'html2canvas';
   styleUrl: './transfer.component.css'
 })
 export class TransferComponent {
-  balance: number = 5000;
+  balance: number = 0;
   recipientId: string = '';
   amount: number = 0;
   pin: string = '';
@@ -37,24 +38,42 @@ export class TransferComponent {
   @ViewChild('screenshotTarget', { static: false }) screenshotTarget!: ElementRef;
 
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar,private authService: AuthService) {}
 
   transferMoney() {
     if (!/^\d{8}$/.test(this.recipientId)) {
-      this.snackBar.open("Invalid Wallet ID. It must be exactly 8 digits.", "Close", { duration: 3000 });
+      this.snackBar.open('Invalid Wallet ID. It must be exactly 8 digits.', 'Close', { duration: 3000 });
       return;
     }
-
     if (!/^\d{4}$/.test(this.pin)) {
-      this.snackBar.open("Invalid PIN. It must be exactly 4 digits.", "Close", { duration: 3000 });
+      this.snackBar.open('Invalid PIN. It must be exactly 4 digits.', 'Close', { duration: 3000 });
+      return;
+    }
+    if (this.amount <= 0 || this.amount > this.balance) {
+      this.snackBar.open('Invalid amount. Check your balance.', 'Close', { duration: 3000 });
       return;
     }
 
-    this.snackBar.open(`₹${this.amount} transferred to Wallet ID: ${this.recipientId}`, "Close", { duration: 3000 });
+    const transferData = {
+      recipientId: this.recipientId,
+      amount: this.amount,
+      pin: this.pin
+    };
 
-    this.transactionSuccess = true;
-    this.captureScreenshot()// Give some time for UI to render
+    this.authService.transferMoney(transferData).subscribe({
+      next: (response) => {
+        this.snackBar.open(`₹${this.amount} transferred successfully!`, 'Close', { duration: 3000 });
+        this.balance -= this.amount;
+        this.transactionSuccess = true;
+        setTimeout(() => this.captureScreenshot(), 500);
+      },
+      error: (error) => {
+        this.snackBar.open('Transfer failed. Please try again.', 'Close', { duration: 3000 });
+        console.error('Transfer error:', error);
+      }
+    });
   }
+
 
   captureScreenshot() {
     setTimeout(() => {

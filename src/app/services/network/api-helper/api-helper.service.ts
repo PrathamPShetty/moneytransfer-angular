@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://89.233.104.140:7500/api/'; // ← Update with your API URL
+  private apiUrl = 'http://127.0.0.1:8000/api/'; // ← Update with your API URL
   private tokenKey = 'access_token';
   private userSubject: BehaviorSubject<any>;
 
@@ -45,9 +45,64 @@ export class AuthService {
   getUserObservable(): Observable<any> {
     return this.userSubject.asObservable();
   }
+  refreshToken(): Observable<any> {
+    const refresh = localStorage.getItem('refresh_token'); // Retrieve refresh token
 
-  // To refresh balance or get profile details
-  getProfile(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/profile/`);
+    if (!refresh) {
+      this.logout(); // Logout user if no refresh token is found
+      return new Observable(observer => observer.error('No refresh token available'));
+    }
+
+    return this.http.post<any>(`${this.apiUrl}token/refresh/`, { refresh }).pipe(
+      tap(response => {
+        localStorage.setItem(this.tokenKey, response.access); // Update access token
+        this.userSubject.next(response.access);
+      })
+    );
+
+
   }
+
+
+  getProfile(): Observable<any> {
+    const token = this.getToken(); // Retrieve token from localStorage
+
+    if (!token) {
+      throw new Error('No access token found'); // Prevent unauthorized request
+    }
+
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+
+    return this.http.get<any>(`${this.apiUrl}profile/`, { headers });
+  }
+
+  transferMoney(data: any): Observable<any> {
+    const token = this.getToken(); // Retrieve token from localStorage
+
+    if (!token) {
+      throw new Error('No access token found'); // Prevent unauthorized request
+    }
+
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+
+    return this.http.post(`${this.apiUrl}transfer/`, data, { headers });
+  }
+
+  getTransactions(): Observable<any> {
+    const token = this.getToken(); // Retrieve token from localStorage
+
+    if (!token) {
+      throw new Error('No access token found'); // Prevent unauthorized request
+    }
+
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.get<any>(`${this.apiUrl}transactions/`, { headers });
+  }
+
 }

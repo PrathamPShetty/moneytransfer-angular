@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {DatePipe, NgClass, TitleCasePipe} from '@angular/common';
-import {TransactionsService} from '../../../services/transaction/transaction.service';
+import {AuthService} from '../../../services/network/api-helper/api-helper.service';
 
 @Component({
   selector: 'app-transactions',
@@ -15,16 +15,16 @@ import {TransactionsService} from '../../../services/transaction/transaction.ser
 })
 export class TransactionsComponent implements OnInit {
   transactions: any[] = [];
-  userWallet: string = '12345678'; // Replace with actual user wallet ID from authentication
+  userWallet: string = ''; // Replace with actual user wallet ID from authentication
 
-  constructor(private transactionService:TransactionsService) {}
+  constructor( private authService: AuthService) {}
 
   ngOnInit(): void {
     this.fetchTransactions();
   }
 
   fetchTransactions(): void {
-    this.transactionService.getTransactions().subscribe(
+    this.authService.getTransactions().subscribe(
       (data: { data: any[]; }) => {
         this.transactions = data.data; // Assuming formatted_response() wraps data in a "data" key
       },
