@@ -1,0 +1,122 @@
+/* Container for centering the form */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #dfe9f3, #ffffff);
+  padding: 20px;
+}
+
+/* Signup Card */
+.signup-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 35px;
+  background: rgba(255, 255, 255, 0.4); /* Glassmorphic effect */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Form Title */
+mat-card-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a237e;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Custom Input Field Styling */
+mat-form-field {
+  width: 100%;
+  position: relative;
+}
+
+/* Glassmorphic Input Styling */
+mat-form-field .mat-mdc-text-field-wrapper {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  transition: 0.3s ease-in-out;
+  box-shadow: inset 3px 3px 8px rgba(255, 255, 255, 0.4),
+  inset -3px -3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* On Focus Effect */
+mat-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: #1a237e;
+  box-shadow: 0 0 10px rgba(26, 35, 126, 0.3);
+}
+
+/* Input Text */
+input {
+  color: #333;
+  font-weight: 500;
+}
+
+/* Error Text */
+mat-error {
+  color: #d32f2f;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* Signup Button */
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: grey;
+  color: white;
+  border-radius: 10px;
+  transition: 0.3s;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background:grey;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Login Link */
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.login-link a {
+  color: #1a237e;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .signup-card {
+    padding: 25px;
+  }
+
+  mat-card-title {
+    font-size: 20px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}

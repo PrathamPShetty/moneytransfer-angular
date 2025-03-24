@@ -1,0 +1,35 @@
+<mat-toolbar color="primary" class="navbar">
+  <!-- Toggle Button -->
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>MERC Portal</span>
+</mat-toolbar>
+
+<mat-sidenav-container class="main-container">
+  <!-- Sidenav -->
+  <mat-sidenav #sidenav mode="over">
+    <mat-nav-list class="sidenav-list">
+      @for (item of options; track item.name) {
+        <a mat-list-item [routerLink]="item.routerLink" (click)="sidenav.toggle()">
+          {{ item.name }}
+        </a>
+      }
+
+      <div class="spacer"></div>
+
+      <!-- Logout Button -->
+      <button mat-list-item (click)="logout()" class="logout-button">
+        <span class="logout-text">Logout</span>
+        <mat-icon class="logout-icon">logout</mat-icon>
+      </button>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

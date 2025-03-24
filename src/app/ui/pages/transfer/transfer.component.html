@@ -1,0 +1,66 @@
+<!-- Transfer Form -->
+<div class="transfer-container mat-elevation-z3">
+  <mat-card-title style="padding-bottom: 15px">
+    Transfer Money
+  </mat-card-title>
+  <mat-card class="transfer-card">
+    <mat-card-content>
+      <!-- Recipient Wallet ID -->
+      <mat-form-field appearance="outline">
+        <mat-label>Recipient Wallet ID</mat-label>
+        <input matInput type="text" [(ngModel)]="recipientId"
+               required pattern="\\d{8}" #walletId="ngModel"
+               maxlength="8" minlength="8">
+        @if(walletId.invalid && walletId.dirty)
+        {
+          <mat-error>
+            Wallet ID must be exactly 8 digits.
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Amount -->
+      <mat-form-field appearance="outline">
+        <mat-label>Amount (₹)</mat-label>
+        <input matInput type="number" [(ngModel)]="amount" required min="1">
+      </mat-form-field>
+
+      <!-- PIN -->
+      <mat-form-field appearance="outline">
+        <mat-label>Enter 4-digit PIN</mat-label>
+        <input matInput type="password" [(ngModel)]="pin"
+               required maxlength="4" minlength="4"
+               pattern="\\d{4}" #pinInput="ngModel">
+        @if(pinInput.invalid && pinInput.dirty)
+        {
+          <mat-error>
+            PIN must be exactly 4 digits.
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="transferMoney()">Transfer</button>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- ✅ Place Overlay Outside Transfer Form ✅ -->
+@if(transactionSuccess)
+{
+  <div class="success-overlay">
+    <div class="success-dialog" #screenshotTarget>
+      <h2>Transaction Successful</h2>
+      <p><strong>Amount:</strong> ₹{{ amount }}</p>
+      <p><strong>Recipient:</strong> {{ recipientId }}</p>
+      <p><strong>Date:</strong> {{ todayDate | date: 'MMM d, y, h:mm a' }}</p>
+
+      <button mat-raised-button color="primary" (click)="shareScreenshot('email')">
+        Share via Email
+      </button>
+      <button mat-raised-button color="accent" (click)="shareScreenshot('whatsapp')">
+        Share via WhatsApp
+      </button>
+      <button mat-button color="warn" (click)="closeOverlay()">Close</button>
+    </div>
+  </div>
+}

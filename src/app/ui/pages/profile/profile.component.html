@@ -1,0 +1,57 @@
+<div class="profile-container">
+
+  <!-- Profile Section -->
+  <mat-card class="profile-card">
+    <div class="profile-header">
+            <mat-icon>person</mat-icon>
+        <div class="profile-info">
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.phone }}</p>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Wallet & Balance Section -->
+  <mat-card class="wallet-card">
+    <mat-card-content>
+      <div class="wallet-info">
+        <p><strong>Wallet ID:</strong> {{ user.walletId }}</p>
+      </div>
+      <div class="balance-section">
+        <span><strong>Balance:</strong></span>
+        <span class="balance-amount">
+          {{ showBalance ? (user.balance | currency:'INR') : '********' }}
+        </span>
+        <button mat-icon-button (click)="toggleBalance()">
+          <mat-icon>{{ showBalance ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Quick Actions -->
+  <div class="action-container">
+    <mat-card class="action-card transactions" (click)="navigateTo('transactions')">
+      <mat-card-content>
+        <mat-icon class="action-icon">history</mat-icon>
+        <p>Transactions</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="action-card transfer" (click)="navigateTo('transfer')">
+      <mat-card-content>
+        <mat-icon class="action-icon">send</mat-icon>
+        <p>Transfer</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Set PIN Card -->
+  <mat-card class="pin-card">
+    <mat-card-content>
+      <p>Secure Your Transactions</p>
+      <button mat-raised-button color="primary" (click)="openSetPinDialog()">Set / Change PIN</button>
+    </mat-card-content>
+  </mat-card>
+
+</div>

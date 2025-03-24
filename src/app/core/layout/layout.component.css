@@ -1,0 +1,90 @@
+/* Navbar stays fixed at the top */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensures it overlaps other elements */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for distinction */
+  border-bottom: 1px solid #ddd; /* Light bottom border */
+  background-color: #fff; /* Ensure background is solid */
+  padding: 16px;
+}
+
+/* Main container starts below the navbar */
+.main-container {
+  margin-top: 64px; /* Adjust based on the navbar height (default 64px for mat-toolbar) */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+  background-color: #f5f5f5;
+}
+
+/* Sidenav styling */
+mat-sidenav {
+  height: 100%;
+  box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for the right side */
+  border-right: 1px solid #ddd; /* Light right border */
+  background-color: #f9f9f9; /* Slightly lighter background for contrast */
+}
+
+/* Sidenav list with flex layout */
+.sidenav-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between; /* Ensure logout button is at the bottom */
+  padding: 0 16px 16px;
+}
+
+/* Spacer pushes logout button to the bottom */
+.spacer {
+  flex-grow: 1;
+}
+
+/* Content area styling */
+.content {
+  flex: 1;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Footer styling */
+.footer {
+  text-align: center;
+  padding: 16px;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+  margin-top: auto; /* Ensure footer is at the bottom */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer span {
+  margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .footer {
+    font-size: 12px;
+  }
+}
+
+/* Optional: Ensure sidenav and content are properly aligned */
+mat-sidenav-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

@@ -1,0 +1,45 @@
+<div class="transactions-page">
+  <!-- Title (Outside Card) -->
+  <h2 class="title">Transaction History</h2>
+
+
+    @if(transactions.length === 0){
+      <div class="no-transactions">
+        <p>No transactions available</p>
+      </div>
+
+    }
+   @for(transaction of transactions;track $index){
+     <div  class="transaction-card"
+           [ngClass]="{'sent': transaction.sender_wallet === userWallet, 'received': transaction.receiver_wallet === userWallet}">
+
+       <div class="transaction-header">
+        <span class="status-badge"
+              [ngClass]="{'success': transaction.status === 'success', 'failed': transaction.status === 'failed'}">
+          {{ transaction.status | titlecase }}
+        </span>
+         <span class="amount">₹{{ transaction.amount }}</span>
+       </div>
+
+       <div class="transaction-body">
+         @if(transaction.sender_wallet === userWallet){
+           <p  class="transaction-type">
+             Sent to <span class="wallet-id">{{ transaction.receiver_wallet }}</span>
+           </p>
+         }
+
+         @if(transaction.receiver_wallet === userWallet){
+           <p class="transaction-type">
+             Received from <span class="wallet-id">{{ transaction.sender_wallet }}</span>
+           </p>
+         }
+
+
+         <p class="timestamp">{{ transaction.timestamp | date: 'MMM d, y, h:mm a' }}</p>
+       </div>
+
+     </div>
+   }
+
+
+</div>
