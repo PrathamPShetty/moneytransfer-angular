@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://your-django-api-url/api'; // ← Update with your API URL
+  private apiUrl = 'http://89.233.104.140:7500/api/'; // ← Update with your API URL
   private tokenKey = 'access_token';
   private userSubject: BehaviorSubject<any>;
 
