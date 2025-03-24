@@ -1,1 +1,32 @@
-<p>login works!</p>
+<div class="login-container">
+  <mat-card>
+    <mat-card-title style="padding-bottom: 10px">Login</mat-card-title>
+    <mat-card-content>
+      <form (submit)="onSubmit()">
+        <mat-form-field class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="email" name="email" type="email" required>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput [(ngModel)]="password" name="password" type="password" required>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" class="full-width" type="submit">Login</button>
+
+        <!-- Forgot Password Link -->
+        <p class="forgot-password">
+          <a (click)="onForgotPassword()">Forgot Password?</a>
+        </p>
+      </form>
+
+      @if (loading) {
+        <mat-spinner diameter="30"></mat-spinner>
+      }
+      @if (errorMessage) {
+        <p class="error">{{ errorMessage }}</p>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

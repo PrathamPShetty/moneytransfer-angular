@@ -32,11 +32,24 @@ export class AuthService {
       this.loggedIn.next(false);
     }
   }
+  login(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}token/`, { email, password }).pipe(
+      tap((response: any) => {
+        this.setMainToken(response.access, response.refresh);
+        this.setIsLoggedValue(); // Mark as logged in
+        this.router.navigate([RouteConstants.PROFILE]); // Redirect after login
+      }),
+      catchError((error) => {
+        return throwError(error.error?.message || 'Login failed');
+      })
+    );
+  }
 
   setIsLoggedValue() {
     setItem(LSK_IS_LOGGED, 'true')
   }
-  private apiUrl = 'http://localhost:8000/api';
+  private apiUrl = 'http://bank.mcceducare.com/api/';
+
   signup(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/signup/`, userData);
   }
@@ -64,24 +77,23 @@ export class AuthService {
   }
 
   refreshToken() {
-
-    const body = {
-      refreshToken: getRefreshToken()
+    const refresh = getRefreshToken();
+    if (!refresh) {
+      this.logOut();
+      return throwError('No refresh token available');
     }
 
-    return this.httpService.httpPost({
-      queryUrl: REFRESH_TOKEN_API,
-      body: body,
-      showSnackBarOnError: false
-    }).pipe(
-      tap((data: any) => {
-        return data
+    return this.http.post(`${this.apiUrl}token/refresh/`, { refresh }).pipe(
+      tap((response: any) => {
+        this.onTokenChange(response.access, refresh);
       }),
-      catchError((error: any) => {
-        return throwError(error);
+      catchError(() => {
+        this.logOut();
+        return throwError('Session expired, please log in again');
       })
     );
   }
+
 
   onTokenChange(token: any, refreshToken: any,) {
     this.setMainToken(token, refreshToken)
