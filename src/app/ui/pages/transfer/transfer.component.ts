@@ -49,15 +49,12 @@ export class TransferComponent {
       this.snackBar.open('Invalid PIN. It must be exactly 4 digits.', 'Close', { duration: 3000 });
       return;
     }
-    if (this.amount <= 0 || this.amount > this.balance) {
-      this.snackBar.open('Invalid amount. Check your balance.', 'Close', { duration: 3000 });
-      return;
-    }
+
 
     const transferData = {
-      recipientId: this.recipientId,
+      target_wallet_id: this.recipientId,  // Ensure correct key name
       amount: this.amount,
-      pin: this.pin
+      transfer_pin: this.pin  // Ensure correct key name
     };
 
     this.authService.transferMoney(transferData).subscribe({
